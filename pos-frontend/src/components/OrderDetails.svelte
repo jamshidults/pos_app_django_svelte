@@ -10,23 +10,23 @@
   }
 </script>
 
-<div>
-  <table>
-    <thead>
+<div class="overflow-x-auto">
+  <table class="min-w-full divide-y divide-gray-200 bg-white shadow rounded-lg">
+    <thead class="bg-gray-50">
       <tr>
-        <th>Product Code</th>
-        <th>Product Name</th>
-        <th>Quantity</th>
-        <th>Price</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Code</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody class="bg-white divide-y divide-gray-200">
       {#each orderItems as orderItem, index}
-        <tr class:selected={index === selectedOrderIndex} on:click={() => handleRowClick(index)}>
-          <td>{orderItem.product_code}</td>
-          <td>{orderItem.product_name}</td>
-          <td>{orderItem.qty}</td>
-          <td>{orderItem.price}</td>
+        <tr class="hover:bg-gray-100 cursor-pointer {index === selectedOrderIndex ? 'bg-gray-200' : ''}" on:click={() => handleRowClick(index)}>
+          <td class="px-6 py-4 whitespace-nowrap">{orderItem.product_code}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{orderItem.product_name}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{orderItem.qty}</td>
+          <td class="px-6 py-4 whitespace-nowrap">{orderItem.price}</td>
         </tr>
       {/each}
     </tbody>
@@ -34,16 +34,6 @@
 </div>
 
 <style>
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 0.5em;
-    border: 1px solid #ccc;
-  }
-
   .selected {
     background-color: #f0f0f0;
   }

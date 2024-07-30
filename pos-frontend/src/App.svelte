@@ -29,11 +29,10 @@
   }
 
   function handleKeydown(event) {
-
-    if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key=== 'PageDown') {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'PageDown') {
       event.preventDefault();
       if (event.key === 'PageDown') {
-        saveOrder()
+        saveOrder();
       }
       if (event.key === 'ArrowUp') {
         selectedOrderIndex = Math.max(0, selectedOrderIndex - 1);
@@ -55,28 +54,10 @@
       });
       printReceipt(response.data);
       resetOrderLines();
-     
     } catch (error) {
       console.error('Error saving order:', error);
     }
   }
-
-  
-
-
-  // function printReceipt(order) {
-  //   let receipt = `Order ID: ${order.id}\nOrder Date: ${order.order_date}\n\nItems:\n`;
-  //   order.order_details.forEach(detail => {
-  //     receipt += `${detail.product_name} - ${detail.qty} x ${detail.price}\n`;
-  //   });
-  //   const blob = new Blob([receipt], { type: 'text/plain' });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement('a');
-  //   a.href = url;
-  //   a.download = `receipt-${order.id}.txt`;
-  //   a.click();
-  //   URL.revokeObjectURL(url);
-  // }
 
   function printReceipt(order) {
     // Generate receipt content
@@ -100,7 +81,7 @@
     printWindow.document.write(receiptContent);
     printWindow.document.write('</body></html>');
     printWindow.document.close();
-    
+
     // Wait for the document to be fully loaded and then print
     printWindow.onload = function() {
         printWindow.focus();
@@ -109,12 +90,7 @@
             printWindow.close();
         }, 100);  // Close the print window after 100 milliseconds
     };
-}
-
-
-
-
-
+  }
 
   function resetOrderLines() {
     orderItems = [];
@@ -136,14 +112,15 @@
 </script>
 
 <Header />
-<main tabindex="0" role="application" aria-label="POS Application">
-  <ProductEntryForm {items} on:addItem={addOrderItem} {editItem} />
-  <OrderDetails {orderItems} {selectedOrderIndex} on:select={event => selectedOrderIndex = event.detail} />
+<main tabindex="0" role="application" aria-label="POS Application" class="container mx-auto p-4">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <ProductEntryForm {items} on:addItem={addOrderItem} {editItem} />
+    <OrderDetails {orderItems} {selectedOrderIndex} on:select={event => selectedOrderIndex = event.detail} />
+  </div>
 </main>
 
 <style>
   main {
-    padding: 1em;
     outline: none;
   }
 </style>

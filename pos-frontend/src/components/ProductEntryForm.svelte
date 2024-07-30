@@ -33,7 +33,6 @@
     qtyInput.focus();
   }
 
-
   async function findProduct() {
     const response = await axios.get(`http://localhost:8000/api/products/?product_code=${productCode}`);
     console.log(response.data);
@@ -43,8 +42,6 @@
     }
     qtyInput.focus();
   }
-
-
 
   function addProduct() {
     if (product && qty > 0) {
@@ -76,7 +73,7 @@
   }
 </script>
 
-<div role="form" aria-label="Product Entry Form" on:keydown={handleKeydown}>
+<div role="form" aria-label="Product Entry Form" on:keydown={handleKeydown} class="space-y-4 p-4 bg-white shadow rounded-lg">
   <input
     type="text"
     placeholder="Enter Product Code"
@@ -84,14 +81,23 @@
     bind:this={productCodeInput}
     on:blur={findProduct}
     aria-label="Product Code"
+    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
   />
-  <input type="text" placeholder="Product Name" value={product ? product.product_name : ''} readonly aria-label="Product Name" />
+  <input
+    type="text"
+    placeholder="Product Name"
+    value={product ? product.product_name : ''}
+    readonly
+    aria-label="Product Name"
+    class="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+  />
   <input
     type="number"
     placeholder="Qty"
     bind:value={qty}
     bind:this={qtyInput}
     aria-label="Quantity"
+    class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
   />
   <input
     type="number"
@@ -99,25 +105,17 @@
     bind:value={price}
     readonly
     aria-label="Price"
+    class="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
   />
-  <button type="button" on:click={addProduct}>{editItem ? 'Update' : 'Add'} to Order</button>
+  <button
+    type="button"
+    on:click={addProduct}
+    class="w-full p-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors duration-200"
+  >
+    {editItem ? 'Update' : 'Add'} to Order
+  </button>
 </div>
 
 <style>
-  div {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5em;
-    margin-bottom: 1em;
-  }
-
-  input, button {
-    padding: 0.5em;
-    font-size: 1em;
-  }
-
-  button {
-    align-self: flex-start;
-    cursor: pointer;
-  }
+  /* Add any additional styles if needed */
 </style>
