@@ -1,8 +1,9 @@
 <script>
   import { createEventDispatcher, onMount } from 'svelte';
   import axios from 'axios';
-  export let items = [];
+ 
   export let editItem = null;
+
   let productCode = '';
   let product = null;
   let qty = '';
@@ -22,6 +23,9 @@
   $: if (editItem) {
     populateForm(editItem);
   }
+
+
+
 
   async function populateForm(item) {
     productCode = item.product_code;
@@ -68,8 +72,9 @@
       } else if (document.activeElement === qtyInput) {
         addProduct();
       }
-    } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      productCodeInput.blur();
+    } else if (event.key === 'ArrowUp' ) {
+      console.log("arrow up and arrow down from productForm");
+       productCodeInput.focus();
     }
   }
 </script>
