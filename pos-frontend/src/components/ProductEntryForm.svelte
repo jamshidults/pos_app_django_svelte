@@ -23,9 +23,10 @@
     populateForm(editItem);
   }
 
-  function populateForm(item) {
+  async function populateForm(item) {
     productCode = item.product_code;
-    product = items.find(p => p.product_code === +productCode);
+    const response = await axios.get(`http://localhost:8000/api/products/?product_code=${productCode}`);
+    product = response.data[0];
     if (product) {
       price = item.price;
       qty = item.qty;
