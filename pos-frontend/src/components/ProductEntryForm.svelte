@@ -1,19 +1,37 @@
 <script>
-  import { createEventDispatcher, onMount } from 'svelte';
+  import { createEventDispatcher, onMount,onDestroy } from 'svelte';
   import axios from 'axios';
  
   export let editItem = null;
 
   let productCode = '';
   let product = null;
+  let products = [];
   let qty = '';
   let price = 0;
   const dispatch = createEventDispatcher();
 
   let productCodeInput;
   let qtyInput;
+  $: product = products.find(p => p.product_code == productCode) || '';
+
+   async function fetchProducts() {
+    try {
+      const response = await axios.get('http://localhost:8000/api/products/');
+      products = response.data;
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  }
+
+  function getProduct() {
+    product = products.find(p => p.product_code == productCode) || '';
+  }
+
+
 
   onMount(() => {
+    fetchProducts();
     productCodeInput.focus();
     if (editItem) {
       populateForm(editItem);
@@ -25,12 +43,18 @@
   }
 
 
+    onDestroy(() => {
+    document.removeEventListener('keydown', handleKeydown);
+  });
 
 
-  async function populateForm(item) {
+
+
+
+  function populateForm(item) {
     productCode = item.product_code;
-    const response = await axios.get(`http://localhost:8000/api/products/?product_code=${productCode}`);
-    product = response.data[0];
+    getProduct();
+
     if (product) {
       price = item.price;
       qty = item.qty;
@@ -38,10 +62,8 @@
     qtyInput.focus();
   }
 
-  async function findProduct() {
-    const response = await axios.get(`http://localhost:8000/api/products/?product_code=${productCode}`);
-    console.log(response.data);
-    product = response.data[0];
+  function findProduct() {
+
     if (product) {
       price = product.price;
     }
@@ -49,8 +71,14 @@
   }
 
   function addProduct() {
+      if (product && product.qty_in_ltr *Number(qty) > 3) {
+      alert("Total quantity in liters for this item exceeds 3 liters.");
+      return;
+    }
+
     if (product && qty > 0) {
-      const newItem = { ...product, qty: Number(qty), price };
+
+      const newItem = { ...product, qty: Number(qty), price,qty_in_ltr:product.qty_in_ltr * Number(qty) };
       dispatch('addItem', newItem);
       resetForm();
     }
@@ -68,6 +96,7 @@
   function handleKeydown(event) {
     if (event.key === 'Enter') {
       if (document.activeElement === productCodeInput) {
+
         findProduct();
       } else if (document.activeElement === qtyInput) {
         addProduct();
