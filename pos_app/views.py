@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from .models import Product, Order
-from .serializers import ProductSerializer, OrderSerializer
+from .models import Product, Order, PaymentMethod, Counter
+from .serializers import ProductSerializer, OrderSerializer, CounterSerializer, PaymentMehthodSerializer
 
 
 def index(request):
@@ -20,3 +20,12 @@ class ProductViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class CounterViewSet(viewsets.ModelViewSet):
+    queryset = Counter.objects.all()
+    serializer_class = CounterSerializer
+
+class PaymentMethodViewSet(viewsets.ModelViewSet):
+    queryset = PaymentMethod.objects.all()
+    serializer_class = PaymentMehthodSerializer

@@ -1,10 +1,22 @@
 from rest_framework import serializers
-from .models import Product, Order, OrderDetail
+from .models import Product, Order, OrderDetail, PaymentMethod, Counter
+
+
+class PaymentMehthodSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentMethod
+        fields = '__all__'
+
+class CounterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Counter
+        fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+
 class OrderDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderDetail
@@ -16,6 +28,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
+        read_only_fields = ['id', 'order_date']
 
     def create(self, validated_data):
         order_details_data = validated_data.pop('order_details')

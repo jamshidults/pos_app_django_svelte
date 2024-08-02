@@ -1,40 +1,71 @@
 <script>
-  export let paymentMethod = 'cash';
-  export let orderTotal = 0;
-  export let salesman = 'jamshid';
-  export let totalQtyInLtr = 0.0;
+  export let orderTotal;
+  export let totalQtyInLtr;
+  export let counters = [];
+  export let paymentMethods = [];
+  export let selectedCounterId;
+  export let selectedPaymentMethodId;
+
+  // Function to update the selected payment method based on the selected counter
+  function handleCounterChange() {
+    const selectedCounter = counters.find(counter => counter.id === selectedCounterId);
+    if (selectedCounter) {
+      selectedPaymentMethodId = selectedCounter.payment_method;
+      console.log("payment mehtod id>>>>>>>>>>>>>>",selectedPaymentMethodId)
+    }
+  }
+
+  // Watch for changes in selectedCounterId to update the payment method
+  $: if (selectedCounterId) {
+    handleCounterChange();
+  }
 </script>
 
-<div class="bg-gray-100 p-4 mt-4 rounded-lg shadow-lg">
-  <div class="flex justify-between items-center mb-4">
-    <div class="w-1/4">
-      <label for="paymentMethod" class="block text-sm font-medium text-gray-700">Payment Method</label>
-      <select id="paymentMethod" bind:value={paymentMethod} class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-        <option value="">Select Payment Method</option>
-        <option value="cash">Cash</option>
-        <option value="card">Card</option>
-        <option value="upi">UPI</option>
+<footer class="bg-gray-200 text-gray-800 p-2 fixed bottom-0 w-full flex justify-between items-center border-t border-gray-300">
+
+  <div class="flex items-center space-x-4">
+    <div>
+      <label for="counter" class="block text-sm font-medium text-gray-700">Counter</label>
+      <select
+        id="counter"
+        bind:value={selectedCounterId}
+        class="mt-1 block w-full pl-2 pr-8 py-1 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      >
+        {#each counters as counter}
+          <option value={counter.id}>{counter.name}</option>
+        {/each}
       </select>
     </div>
-    <div class="w-1/4">
-      <label for="salesman" class="block text-sm font-medium text-gray-700">Salesman</label>
-      <input type="text" id="salesman" bind:value={salesman} class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+    <div>
+      <label for="paymentMethod" class="block text-sm font-medium text-gray-700">Payment Method</label>
+      <select
+        id="paymentMethod"
+        bind:value={selectedPaymentMethodId}
+        class="mt-1 block w-full pl-2 pr-8 py-1 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      >
+        {#each paymentMethods as method}
+          <option value={method.id}>{method.name}</option>
+        {/each}
+      </select>
     </div>
-
-
-     <div class="w-1/4 text-right">
-      <label for="totalQtyInLtr" class="block text-sm font-medium text-gray-700">Total Qty In Ltr</label>
-      <div id="totalQtyInLtr" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-green-600">
-        {totalQtyInLtr.toFixed(2)} Ltr
-      </div>
-    </div>
-
-    <div class="w-1/4 text-right">
-      <label for="orderTotal" class="block text-sm font-medium text-gray-700">Order Total</label>
-      <div id="orderTotal" class="mt-1 block w-full py-2 px-3 border border-gray-300 bg-gray-50 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-green-600">
-        ₹{orderTotal.toFixed(2)}
-      </div>
-    </div>
-
   </div>
-</div>
+  <div class="text-lg font-bold text-green-600">
+    Total Qty Ltr: {totalQtyInLtr.toFixed(2)}
+  </div>
+  <div class="text-lg font-bold text-green-600">
+    Order Total: {orderTotal.toFixed(2)}
+  </div>
+
+</footer>
+
+<style>
+  footer {
+    background-color: #e5e7eb; /* Tailwind's bg-gray-200 */
+    color: #1f2937; /* Tailwind's text-gray-800 */
+  }
+
+  select {
+    background-color: #f9fafb; /* Tailwind's bg-gray-50 */
+    color: #1f2937; /* Tailwind's text-gray-800 */
+  }
+</style>

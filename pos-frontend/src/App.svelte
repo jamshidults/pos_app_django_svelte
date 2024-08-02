@@ -10,8 +10,7 @@
   let editItem = null;
   let selectedOrderIndex = -1;
   let nextId = 1;
-  let paymentMethod = 'cash';
-  let user = {};
+
 
   $: orderTotal = orderItems.reduce((sum, item) => sum + (item.qty * item.price), 0);
   $: totalQtyInLtr = orderItems.reduce((sum, item) => sum + item.qty_in_ltr, 0);
@@ -19,14 +18,39 @@
      alert("Total quantity in liters cannot exceed 3 liters.");
   }
 
-  async function fetchUser() {
+
+  let counters = [];
+  let paymentMethods = [];
+  let selectedCounterId = null;
+  let selectedPaymentMethodId = null;
+
+  async function fetchCounters() {
     try {
-      const response = await axios.get('http://localhost:8000/api/user/');
-      user = response.data;
+      const response = await axios.get('http://localhost:8000/api/counters/');
+      counters = response.data;
     } catch (error) {
-      console.error('Error fetching user:', error);
+      console.error('Error fetching counters:', error);
     }
   }
+
+  async function fetchPaymentMethods() {
+    try {
+      const response = await axios.get('http://localhost:8000/api/payment_methods/');
+      paymentMethods = response.data;
+    } catch (error) {
+      console.error('Error fetching payment methods:', error);
+    }
+  }
+
+
+  // async function fetchUser() {
+  //   try {
+  //     const response = await axios.get('http://localhost:8000/api/user/');
+  //     user = response.data;
+  //   } catch (error) {
+  //     console.error('Error fetching user:', error);
+  //   }
+  // }
 
   function addOrderItem(event) {
     const newItem = event.detail;
@@ -86,8 +110,8 @@
       const response = await axios.post('http://localhost:8000/api/orders/', {
         order_details: orderItems,
         order_total: orderTotal,
-        payment_method: paymentMethod,
-        user_id: user.id
+        counter:selectedCounterId,
+        payment_method: selectedPaymentMethodId
       });
       printReceipt(response.data);
       resetOrderLines();
@@ -143,8 +167,10 @@
   }
 
   onMount(() => {
+    fetchCounters();
+    fetchPaymentMethods();
     document.addEventListener('keydown', handleKeydown);
-    fetchUser();
+  
   });
 </script>
 
@@ -155,4 +181,4 @@
     <OrderDetails {orderItems} {selectedOrderIndex} on:select={event => selectedOrderIndex = event.detail} />
   </div>
 </main>
-<OrderFooter bind:orderTotal bind:paymentMethod bind:totalQtyInLtr />
+ <OrderFooter {orderTotal} {totalQtyInLtr} {counters} {paymentMethods} bind:selectedCounterId bind:selectedPaymentMethodId />
