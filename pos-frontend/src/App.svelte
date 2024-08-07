@@ -85,7 +85,7 @@
   function handleKeydown(event) {
     if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'PageDown') {
       event.preventDefault();
-      if (event.key === 'PageDown') {
+      if (event.key === 'PageDown' && orderItems.length >0) {
         saveOrder();
       }
       if (event.key === 'ArrowUp') {
@@ -148,7 +148,7 @@
         printWindow.print();
         setTimeout(function() {
             printWindow.close();
-        }, 100);
+        }, 10);
     };
   }
 

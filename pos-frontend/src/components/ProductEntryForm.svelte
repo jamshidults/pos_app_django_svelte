@@ -94,17 +94,19 @@
   }
 
   function handleKeydown(event) {
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' ) {
       if (document.activeElement === productCodeInput) {
 
         findProduct();
       } else if (document.activeElement === qtyInput) {
         addProduct();
+        productCodeInput.focus();
       }
-    } else if (event.key === 'ArrowUp' ) {
+    } else if (event.key === 'ArrowUp' || event.key === 'PageDown' ) {
       console.log("arrow up and arrow down from productForm");
        productCodeInput.focus();
     }
+
   }
 </script>
 
